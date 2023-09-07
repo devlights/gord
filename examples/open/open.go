@@ -23,10 +23,10 @@ func main() {
 }
 
 func run(p filePath) error {
-	quitFn, _ := gord.InitGord()
+	quitFn := gord.MustInitGord()
 	defer quitFn()
 
-	g, r, _ := gord.NewGord()
+	g, r := gord.MustNewGord()
 	defer r()
 
 	g.MustSetVisible(true)

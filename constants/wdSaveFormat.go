@@ -10,6 +10,8 @@ type (
 // # REFERENCES:
 //
 //   - https://learn.microsoft.com/ja-jp/office/vba/api/word.wdsaveformat
+//
+//goland:noinspection GoUnusedConst
 const (
 	WdFormatDocument                    WdSaveFormat = 0  // Microsoft Office Word 97 - 2003 binary file format.
 	WdFormatDOSText                     WdSaveFormat = 4  // Microsoft DOS text format.
