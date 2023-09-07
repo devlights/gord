@@ -3,11 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/devlights/gord"
-	"github.com/devlights/gord/constants"
 	"log"
 	"os"
 	"path/filepath"
+
+	"github.com/devlights/gord"
+	"github.com/devlights/gord/constants"
 )
 
 // flag parameters

@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/devlights/gord"
 	"os"
 	"time"
+
+	"github.com/devlights/gord"
 )
 
 type (
