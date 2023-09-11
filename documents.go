@@ -49,6 +49,15 @@ func (d *Documents) Add() (*Document, ReleaseFunc, error) {
 	return doc, releaseFn, nil
 }
 
+func (d *Documents) MustAdd() (*Document, ReleaseFunc) {
+	dc, fn, err := d.Add()
+	if err != nil {
+		panic(err)
+	}
+
+	return dc, fn
+}
+
 func (d *Documents) Open(filePath string) (*Document, ReleaseFunc, error) {
 	dc, err := oleutil.CallMethod(d.ComObject(), "Open", filePath)
 	if err != nil {
