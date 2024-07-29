@@ -74,6 +74,39 @@ func (w *Document) PrintOut() error {
 }
 
 func (w *Document) ExportAsFixedFormat(path string, fmtType constants.WdExportFormat) error {
-	_, err := oleutil.CallMethod(w.ComObject(), "ExportAsFixedFormat", path, int(fmtType))
+	var (
+		outputFileName     = path         // PDF ファイルまたは XPS ファイルのパスとファイル名
+		exportFormat       = int(fmtType) // PDF 形式または XPS 形式 (WdExportFormat)
+		openAfterExport    = false        // コンテンツをエクスポートした後で新しいファイルを開くかどうか
+		optimizeFor        = 0            // 画面または印刷用に最適化するかどうか (WdExportOptimizeFor)
+		exportRange        = 0            // エクスポートする範囲 (WdExportRange)
+		from               = 0            // exportRange パラメーターが wdExportFromTo に設定されている場合は、開始ページ番号を指定
+		to                 = 0            // Range パラメーターが wdExportFromTo に設定されている場合は、終了ページ番号を指定
+		item               = 0            // エクスポート プロセスにテキストのみを含めるか、テキストとマークアップ コードを含めるかを指定 (WdExportItem)
+		includeDocProps    = true         // 新たにエクスポートするファイルに文書のプロパティを含めるかどうかを指定
+		keepIRM            = true         // ExportFormat が wdExportFormatPDF の場合、このフラグはラベルを PDF にコピーするかどうかを指定
+		createBookmarks    = 1            // ブックマークをエクスポートするかどうか、およびエクスポートするブックマークの種類を指定 (WdExportCreateBookmarks)
+		docStructureTags   = true         // フローとコンテンツの論理的な構成に関する情報など、スクリーン リーダーのために余分なデータを含めるかどうかを指定
+		bitmapMissingFonts = true         // テキストのビットマップを含めるかどうかを指定
+		useISO19005_1      = false        // ISO 19005-1 として標準化された PDF サブセットに PDF の使用を制限するかどうかを指定
+	)
+	_, err := oleutil.CallMethod(
+		w.ComObject(),
+		"ExportAsFixedFormat",
+		outputFileName,
+		exportFormat,
+		openAfterExport,
+		optimizeFor,
+		exportRange,
+		from,
+		to,
+		item,
+		includeDocProps,
+		keepIRM,
+		createBookmarks,
+		docStructureTags,
+		bitmapMissingFonts,
+		useISO19005_1)
+
 	return err
 }
