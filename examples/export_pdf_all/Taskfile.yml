@@ -1,0 +1,19 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  APP_NAME: word2pdfall
+
+tasks:
+  default:
+    cmds:
+      - task: build
+  build:
+    cmds:
+      - goimports -w .
+      - go build -o {{.APP_NAME}}{{exeExt}} .
+  clean:
+    cmds:
+      - cmd: '{{if eq OS "windows"}}cmd.exe /C "del /S /Q {{.APP_NAME}}{{exeExt}}"{{else}}rm -rf {{.APP_NAME}}{{exeExt}}{{end}}'
+        ignore_error: true
