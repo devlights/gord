@@ -39,7 +39,7 @@ func (d *Documents) Releaser() *Releaser {
 }
 
 func (d *Documents) Add() (*Document, ReleaseFunc, error) {
-	dc, err := oleutil.CallMethod(d.ComObject(), "Add", nil)
+	dc, err := oleutil.CallMethod(d.ComObject(), "Add")
 	if err != nil {
 		return nil, nil, err
 	}

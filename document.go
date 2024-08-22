@@ -44,6 +44,26 @@ func (w *Document) Releaser() *Releaser {
 	return w.Gord().Releaser()
 }
 
+func (w *Document) Range() (*Range, error) {
+	result, err := oleutil.CallMethod(w.ComObject(), "Range")
+	if err != nil {
+		return nil, err
+	}
+
+	r := NewRange(w, result.ToIDispatch())
+	return r, nil
+}
+
+func (w *Document) Characters() (*Characters, error) {
+	result, err := oleutil.GetProperty(w.ComObject(), "Characters")
+	if err != nil {
+		return nil, err
+	}
+
+	c := NewCharacters(w, result.ToIDispatch())
+	return c, nil
+}
+
 func (w *Document) Save() error {
 	_, err := oleutil.CallMethod(w.ComObject(), "Save")
 	return err
@@ -55,6 +75,11 @@ func (w *Document) SaveAs2(filePath string, format constants.WdSaveFormat) error
 
 func (w *Document) SaveAsWithFileFormat(filePath string, format constants.WdSaveFormat) error {
 	_, err := oleutil.CallMethod(w.ComObject(), "SaveAs2", filePath, int(format))
+	return err
+}
+
+func (w *Document) SaveAsWithFileFormatDefault(filePath string) error {
+	_, err := oleutil.CallMethod(w.ComObject(), "SaveAs2", filePath, int(constants.WdSaveFormatDocumentDefault))
 	return err
 }
 
