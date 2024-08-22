@@ -119,35 +119,6 @@ func run() error {
 		return err
 	}
 
-	c, err := newDoc.Characters()
-	if err != nil {
-		return genErr("newDoc.Characters()", err)
-	}
-
-	cc, err := c.Count()
-	if err != nil {
-		return genErr("c.Count()", err)
-	}
-
-	if cc > 1 {
-		// 最後の余分な改行を削除
-
-		r, err := c.Last()
-		if err != nil {
-			return genErr("c.Last()", err)
-		}
-
-		ra, err := r.Previous()
-		if err != nil {
-			return genErr("r.Previous()", err)
-		}
-
-		err = ra.Delete()
-		if err != nil {
-			return genErr("ra.Delete()", err)
-		}
-	}
-
 	// 保存
 	err = newDoc.SaveAsWithFileFormatDefault(abs(args.out))
 	if err != nil {
