@@ -93,9 +93,9 @@ func run() error {
 		}
 
 		// ドキュメントの最後に移動
-		nr, err := newDoc.Range()
+		nr, err := newDoc.AllRange()
 		if err != nil {
-			return genErr("newDoc.Range()", err)
+			return genErr("newDoc.AllRange()", err)
 		}
 
 		err = nr.Collapse(constants.WdCollapseDirectionEnd)
