@@ -1,0 +1,22 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  APP_NAME: copy-as-picture
+
+tasks:
+  default:
+    cmds:
+      - task: run
+  build:
+    cmds:
+      - go build -o {{.APP_NAME}}{{exeExt}} .
+    sources:
+      - ./*.go
+    generates:
+      - ./{{.APP_NAME}}{{exeExt}}
+  run:
+    deps: [ build ]
+    cmds:
+      - ./{{.APP_NAME}}{{exeExt}} -in testdata/test01.docx -out testdata/result.docx
