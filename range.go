@@ -117,6 +117,15 @@ func (r *Range) InsertPageBreak() error {
 	return r.InsertBreak(constants.WdBreakTypePageBreak)
 }
 
+func (r *Range) Cut() error {
+	_, err := oleutil.CallMethod(r.ComObject(), "Cut")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (r *Range) Copy() error {
 	_, err := oleutil.CallMethod(r.ComObject(), "Copy")
 	if err != nil {
@@ -126,8 +135,32 @@ func (r *Range) Copy() error {
 	return nil
 }
 
+func (r *Range) CopyAsPicture() error {
+	_, err := oleutil.CallMethod(r.ComObject(), "CopyAsPicture")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (r *Range) PasteAndFormat(recoveryType constants.WdRecoveryType) error {
 	_, err := oleutil.CallMethod(r.ComObject(), "PasteAndFormat", int(recoveryType))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Range) PasteSpecial(dataType constants.WdPasteDataType) error {
+	var (
+		iconIndex     = int32(0)                              // DisplayAsIconがTrueの場合、この引数はIconFilenameで指定されたプログラム・ファイルで使用したいアイコンに対応する番号になります
+		link          = false                                 // Trueを指定すると、クリップボードの内容のソース・ファイルへのリンクが作成されます。 デフォルト値は False です。
+		placement     = int32(constants.WdOLEPlacementInLine) // WdOLEPlacement 定数 wdFloatOverText または wdInLine のいずれかを指定する。 デフォルト値は wdInLine です。
+		displayAsIcon = false                                 // リンクをアイコンとして表示するにはTrueを指定します。 デフォルト値はFalseです。
+	)
+	_, err := oleutil.CallMethod(r.ComObject(), "PasteSpecial", iconIndex, link, placement, displayAsIcon, int32(dataType))
 	if err != nil {
 		return err
 	}
