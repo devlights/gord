@@ -44,8 +44,18 @@ func (w *Document) Releaser() *Releaser {
 	return w.Gord().Releaser()
 }
 
-func (w *Document) Range() (*Range, error) {
+func (w *Document) AllRange() (*Range, error) {
 	result, err := oleutil.CallMethod(w.ComObject(), "Range")
+	if err != nil {
+		return nil, err
+	}
+
+	r := NewRange(w, result.ToIDispatch())
+	return r, nil
+}
+
+func (w *Document) Range(start, end int32) (*Range, error) {
+	result, err := oleutil.CallMethod(w.ComObject(), "Range", start, end)
 	if err != nil {
 		return nil, err
 	}

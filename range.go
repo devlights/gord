@@ -47,6 +47,16 @@ func (r *Range) Releaser() *Releaser {
 	return r.Gord().Releaser()
 }
 
+func (r *Range) Find() (*Find, error) {
+	result, err := oleutil.GetProperty(r.ComObject(), "Find")
+	if err != nil {
+		return nil, err
+	}
+
+	f := NewFind(r, result.ToIDispatch())
+	return f, nil
+}
+
 func (r *Range) Delete() error {
 	_, err := oleutil.CallMethod(r.ComObject(), "Delete")
 	if err != nil {
@@ -118,6 +128,42 @@ func (r *Range) Copy() error {
 
 func (r *Range) PasteAndFormat(recoveryType constants.WdRecoveryType) error {
 	_, err := oleutil.CallMethod(r.ComObject(), "PasteAndFormat", int(recoveryType))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Range) Start() (int32, error) {
+	result, err := oleutil.GetProperty(r.ComObject(), "Start")
+	if err != nil {
+		return 0, err
+	}
+
+	return result.Value().(int32), nil
+}
+
+func (r *Range) End() (int32, error) {
+	result, err := oleutil.GetProperty(r.ComObject(), "End")
+	if err != nil {
+		return 0, err
+	}
+
+	return result.Value().(int32), nil
+}
+
+func (r *Range) Text() (string, error) {
+	result, err := oleutil.GetProperty(r.ComObject(), "Text")
+	if err != nil {
+		return "", err
+	}
+
+	return result.Value().(string), nil
+}
+
+func (r *Range) SetText(s string) error {
+	_, err := oleutil.PutProperty(r.ComObject(), "Text", s)
 	if err != nil {
 		return err
 	}
