@@ -93,7 +93,7 @@ func run() error {
 	}
 
 	if err := dr.PasteSpecial(constants.WdPasteDataTypePasteMetafilePicture); err != nil {
-		return genErr("dr.PasteSpecial(constants.WdPasteDataTypePasteBitmap)", err)
+		return genErr("dr.PasteSpecial(constants.WdPasteDataTypePasteMetafilePicture)", err)
 	}
 
 	if err := doc.Save(); err != nil {
