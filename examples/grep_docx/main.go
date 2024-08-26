@@ -144,8 +144,9 @@ func run() error {
 					start, _ := foundRange.Start()
 					end, _ := foundRange.End()
 					text, _ := foundRange.Text()
+					page, _ := foundRange.PageNumber()
 
-					message := fmt.Sprintf("\t>>> HIT (start=%d, end=%d, text=%q)", start, end, text)
+					message := fmt.Sprintf("\t>>> HIT (page=%d, start=%d, end=%d, text=%q)", page, start, end, text)
 					appLog.Println(message)
 
 					found, err = find.Execute()
