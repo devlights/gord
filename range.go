@@ -203,3 +203,21 @@ func (r *Range) SetText(s string) error {
 
 	return nil
 }
+
+func (r *Range) Information(kind constants.WdInformation) (any, error) {
+	result, err := oleutil.GetProperty(r.ComObject(), "Information", int(kind))
+	if err != nil {
+		return nil, err
+	}
+
+	return result.Value(), nil
+}
+
+func (r *Range) PageNumber() (int32, error) {
+	result, err := r.Information(constants.WdInformationActiveEndPageNumber)
+	if err != nil {
+		return -1, err
+	}
+
+	return result.(int32), nil
+}

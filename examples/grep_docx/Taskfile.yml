@@ -19,4 +19,7 @@ tasks:
   run:
     deps: [ build ]
     cmds:
-      - ./{{.APP_NAME}}{{exeExt}} -dir testdata -text "データベース*サイズ"
+      - ./{{.APP_NAME}}{{exeExt}} -dir testdata -text "データベースファイルサイズ" -verbose
+  clean:
+    cmds:
+      - cmd /c "rd /s /q .task"
