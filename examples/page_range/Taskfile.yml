@@ -1,0 +1,21 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  APP_NAME: page-range
+
+tasks:
+  default:
+    cmds:
+      - task: run
+  build:
+    cmds:
+      - go build -o {{.APP_NAME}}{{exeExt}} .
+  run:
+    deps: [ build ]
+    cmds:
+      - ./{{.APP_NAME}}{{exeExt}} -file testdata/test03.docx -page 6
+  clean:
+    cmds:
+      - cmd /c "rd /s /q .task"
