@@ -19,6 +19,7 @@ type (
 		text    string
 		onlyHit bool
 		verbose bool
+		debug   bool
 	}
 )
 
@@ -27,7 +28,7 @@ var (
 )
 
 var (
-	appLog = log.New(os.Stdout, ">>> ", 0)
+	appLog = log.New(os.Stdout, "", 0)
 )
 
 func init() {
@@ -35,6 +36,7 @@ func init() {
 	flag.StringVar(&args.text, "text", "", "search text")
 	flag.BoolVar(&args.onlyHit, "only-hit", true, "show ONLY HIT")
 	flag.BoolVar(&args.verbose, "verbose", false, "verbose mode")
+	flag.BoolVar(&args.debug, "debug", false, "debug mode")
 }
 
 func main() {
@@ -52,8 +54,6 @@ func main() {
 	if err := run(); err != nil {
 		log.Fatal(err)
 	}
-
-	appLog.Println("done")
 }
 
 func abs(p string) string {
@@ -79,7 +79,8 @@ func run() error {
 		return genErr("g.Documents()", err)
 	}
 
-	err = filepath.WalkDir(abs(args.dir), func(path string, d os.DirEntry, err error) error {
+	rootDir := abs(args.dir)
+	err = filepath.WalkDir(rootDir, func(path string, d os.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -103,7 +104,9 @@ func run() error {
 		}
 		defer docReleaseFn()
 
-		appLog.Printf("Document Open: %s", absPath)
+		if args.debug {
+			appLog.Printf("Document Open: %s", absPath)
+		}
 
 		allRange, err := doc.AllRange()
 		if err != nil {
@@ -136,17 +139,16 @@ func run() error {
 			return genErr("find.Execute() [first time]", err)
 		}
 
+		relPath, _ := filepath.Rel(rootDir, absPath)
 		if found {
 			if args.verbose {
 				foundRange := allRange
 
 				for found {
-					start, _ := foundRange.Start()
-					end, _ := foundRange.End()
 					text, _ := foundRange.Text()
 					page, _ := foundRange.PageNumber()
 
-					message := fmt.Sprintf("\t>>> HIT (page=%d, start=%d, end=%d, text=%q)", page, start, end, text)
+					message := fmt.Sprintf("%s (%3d): %q", relPath, page, text)
 					appLog.Println(message)
 
 					found, err = find.Execute()
@@ -157,11 +159,11 @@ func run() error {
 					foundRange = allRange
 				}
 			} else {
-				appLog.Println("\t>>> HIT")
+				appLog.Printf("%s: HIT", relPath)
 			}
 		} else {
 			if !args.onlyHit {
-				appLog.Println("\t>>> NO HIT")
+				appLog.Printf("%s: NO HIT", relPath)
 			}
 		}
 
