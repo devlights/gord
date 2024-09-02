@@ -35,6 +35,10 @@ func NewRangeFromRange(ra *Range, comObject *ole.IDispatch) *Range {
 	return newRange(ra, comObject)
 }
 
+func NewRangeFromParagraph(p *Paragraph, comObject *ole.IDispatch) *Range {
+	return newRange(p, comObject)
+}
+
 func (r *Range) ComObject() *ole.IDispatch {
 	return r.comObj
 }
@@ -45,6 +49,16 @@ func (r *Range) Gord() *Gord {
 
 func (r *Range) Releaser() *Releaser {
 	return r.Gord().Releaser()
+}
+
+func (r *Range) Paragraphs() (*Paragraphs, error) {
+	result, err := oleutil.GetProperty(r.ComObject(), "Paragraphs")
+	if err != nil {
+		return nil, err
+	}
+
+	p := NewParagraphsFromRange(r, result.ToIDispatch())
+	return p, nil
 }
 
 func (r *Range) Find() (*Find, error) {
