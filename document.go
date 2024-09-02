@@ -44,6 +44,16 @@ func (d *Document) Releaser() *Releaser {
 	return d.Gord().Releaser()
 }
 
+func (d *Document) Paragraphs() (*Paragraphs, error) {
+	result, err := oleutil.GetProperty(d.ComObject(), "Paragraphs")
+	if err != nil {
+		return nil, err
+	}
+
+	p := NewParagraphs(d, result.ToIDispatch())
+	return p, nil
+}
+
 func (d *Document) Content() (*Range, error) {
 	result, err := oleutil.GetProperty(d.ComObject(), "Content")
 	if err != nil {
