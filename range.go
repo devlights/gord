@@ -117,6 +117,42 @@ func (r *Range) InsertPageBreak() error {
 	return r.InsertBreak(constants.WdBreakTypePageBreak)
 }
 
+func (r *Range) InsertBefore(text string) error {
+	_, err := oleutil.CallMethod(r.ComObject(), "InsertBefore", text)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Range) InsertAfter(text string) error {
+	_, err := oleutil.CallMethod(r.ComObject(), "InsertAfter", text)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Range) InsertParagraphBefore() error {
+	_, err := oleutil.CallMethod(r.ComObject(), "InsertParagraphBefore")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Range) InsertParagraphAfter() error {
+	_, err := oleutil.CallMethod(r.ComObject(), "InsertParagraphAfter")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (r *Range) Cut() error {
 	_, err := oleutil.CallMethod(r.ComObject(), "Cut")
 	if err != nil {
@@ -215,6 +251,15 @@ func (r *Range) Information(kind constants.WdInformation) (any, error) {
 
 func (r *Range) PageNumber() (int32, error) {
 	result, err := r.Information(constants.WdInformationActiveEndPageNumber)
+	if err != nil {
+		return -1, err
+	}
+
+	return result.(int32), nil
+}
+
+func (r *Range) LineNo() (int32, error) {
+	result, err := r.Information(constants.WdInformationFirstCharacterLineNumber)
 	if err != nil {
 		return -1, err
 	}
