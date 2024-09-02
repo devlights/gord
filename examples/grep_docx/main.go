@@ -147,8 +147,9 @@ func run() error {
 				for found {
 					text, _ := foundRange.Text()
 					page, _ := foundRange.PageNumber()
+					line, _ := foundRange.LineNo()
 
-					message := fmt.Sprintf("%s (%3d): %q", relPath, page, text)
+					message := fmt.Sprintf("%s (%3d,%3d): %q", relPath, page, line, text)
 					appLog.Println(message)
 
 					found, err = find.Execute()
