@@ -69,14 +69,14 @@ func run() error {
 	quitFn, _ := gord.InitGord()
 	defer quitFn()
 
-	g, r, _ := gord.NewGord()
-	defer r()
+	word, wordRelease, _ := gord.NewGord()
+	defer wordRelease()
 
-	_ = g.Silent(false)
+	_ = word.Silent(false)
 
-	docs, err := g.Documents()
+	docs, err := word.Documents()
 	if err != nil {
-		return genErr("g.Documents()", err)
+		return genErr("word.Documents()", err)
 	}
 
 	rootDir := abs(args.dir)
@@ -98,11 +98,11 @@ func run() error {
 		}
 
 		absPath := abs(path)
-		doc, docReleaseFn, err := docs.Open(absPath)
+		doc, docRelease, err := docs.Open(absPath)
 		if err != nil {
 			return err
 		}
-		defer docReleaseFn()
+		defer docRelease()
 
 		if args.debug {
 			appLog.Printf("Document Open: %s", absPath)
@@ -126,8 +126,27 @@ func run() error {
 			return genErr("find.Wrap()", err)
 		}
 
-		if err := find.MatchWildcards(true); err != nil {
-			return genErr("find.MatchWildcards()", err)
+		if err := find.Format(false); err != nil {
+			return genErr("find.Format()", err)
+		}
+
+		if err := find.MatchCase(false); err != nil {
+			return genErr("find.MatchCase()", err)
+		}
+
+		// ワイルドカードを有効にすると MatchCase の設定が無効となるため
+		// サーチテキストに * が含まれている場合のみ有効となるようにする.
+		//
+		// > A wildcard search is always case-sensitive.
+		// > You'll notice the same in the interface: if you tick the "Use wildcards" check box,
+		// > the "Match case" and the "Find whole words only" check boxes will be disabled;
+		//
+		// REF: http://www.vbaexpress.com/forum/showthread.php?41816-Match-Case-in-Find-does-not-work
+		// REF: https://answers.microsoft.com/en-us/msoffice/forum/all/matchwildcardstrue-renders-matchcase-inoperative/c20685ff-99c8-4334-9e59-c5fb95ff617c
+		if strings.Contains(args.text, "*") {
+			if err := find.MatchWildcards(true); err != nil {
+				return genErr("find.MatchWildcards()", err)
+			}
 		}
 
 		if err := find.Text(args.text); err != nil {
