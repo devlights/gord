@@ -20,12 +20,12 @@ func run() error {
 	quit, _ := gord.InitGord()
 	defer quit()
 
-	g, gordRelease, _ := gord.NewGord()
-	defer gordRelease()
+	word, wordRelease, _ := gord.NewGord()
+	defer wordRelease()
 
-	_ = g.Silent(false)
+	_ = word.Silent(false)
 
-	docs, _ := g.Documents()
+	docs, _ := word.Documents()
 	doc, docRelease, _ := docs.Add()
 	defer docRelease()
 

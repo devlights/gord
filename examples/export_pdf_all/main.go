@@ -49,15 +49,15 @@ func run() error {
 		return v
 	}
 
-	quitFn, _ := gord.InitGord()
-	defer quitFn()
+	quit, _ := gord.InitGord()
+	defer quit()
 
-	g, r, _ := gord.NewGord()
-	defer r()
+	word, wordRelease, _ := gord.NewGord()
+	defer wordRelease()
 
-	_ = g.Silent(false)
+	_ = word.Silent(false)
 
-	docs, err := g.Documents()
+	docs, err := word.Documents()
 	if err != nil {
 		return err
 	}
@@ -76,11 +76,11 @@ func run() error {
 		}
 
 		absPath := abs(path)
-		doc, docReleaseFn, err := docs.Open(absPath)
+		doc, docRelease, err := docs.Open(absPath)
 		if err != nil {
 			return err
 		}
-		defer docReleaseFn()
+		defer docRelease()
 		appLog.Printf("Document Open: %s", absPath)
 
 		absPath = abs(strings.ReplaceAll(path, ".docx", ".pdf"))

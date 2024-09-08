@@ -61,24 +61,24 @@ func genErr(procName string, err error) error {
 }
 
 func run() error {
-	quitFn, _ := gord.InitGord()
-	defer quitFn()
+	quit, _ := gord.InitGord()
+	defer quit()
 
-	g, r, _ := gord.NewGord()
-	defer r()
+	word, wordRelease, _ := gord.NewGord()
+	defer wordRelease()
 
-	_ = g.Silent(false)
+	_ = word.Silent(false)
 
-	docs, err := g.Documents()
+	docs, err := word.Documents()
 	if err != nil {
-		return genErr("g.Documents()", err)
+		return genErr("word.Documents()", err)
 	}
 
-	doc, docReleaseFn, err := docs.Open(args.file)
+	doc, docRelease, err := docs.Open(args.file)
 	if err != nil {
 		return genErr("docs.Open(args.file)", err)
 	}
-	defer docReleaseFn()
+	defer docRelease()
 
 	pageRange, err := doc.GetPageRange(int32(args.page))
 	if err != nil {

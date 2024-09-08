@@ -41,15 +41,15 @@ func main() {
 }
 
 func run() error {
-	quitFn, _ := gord.InitGord()
-	defer quitFn()
+	quit, _ := gord.InitGord()
+	defer quit()
 
-	g, r, _ := gord.NewGord()
-	defer r()
+	word, wordRelease, _ := gord.NewGord()
+	defer wordRelease()
 
-	_ = g.Silent(false)
+	_ = word.Silent(false)
 
-	docs, err := g.Documents()
+	docs, err := word.Documents()
 	if err != nil {
 		return err
 	}
@@ -82,11 +82,11 @@ func run() error {
 }
 
 func toDocx(docs *gord.Documents, p string) error {
-	doc, docReleaseFn, err := docs.Open(abs(p))
+	doc, docRelease, err := docs.Open(abs(p))
 	if err != nil {
 		return err
 	}
-	defer docReleaseFn()
+	defer docRelease()
 
 	err = doc.SaveAsWithFileFormat(abs(strings.ReplaceAll(p, "doc", "docx")), constants.WdSaveFormatDocumentDefault)
 	if err != nil {

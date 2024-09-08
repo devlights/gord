@@ -24,24 +24,24 @@ func main() {
 }
 
 func run(p filePath) error {
-	quitFn := gord.MustInitGord()
-	defer quitFn()
+	quit := gord.MustInitGord()
+	defer quit()
 
-	g, r := gord.MustNewGord()
-	defer r()
+	word, wordRelease := gord.MustNewGord()
+	defer wordRelease()
 
-	g.MustSetVisible(true)
+	word.MustSetVisible(true)
 
-	docs, err := g.Documents()
+	docs, err := word.Documents()
 	if err != nil {
 		return err
 	}
 
-	doc, docReleaseFn, err := docs.Open(p)
+	doc, docRelease, err := docs.Open(p)
 	if err != nil {
 		return err
 	}
-	defer docReleaseFn()
+	defer docRelease()
 
 	time.Sleep(5 * time.Second)
 	if err := doc.Close(); err != nil {

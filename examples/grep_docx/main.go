@@ -66,8 +66,8 @@ func genErr(procName string, err error) error {
 }
 
 func run() error {
-	quitFn, _ := gord.InitGord()
-	defer quitFn()
+	quit, _ := gord.InitGord()
+	defer quit()
 
 	word, wordRelease, _ := gord.NewGord()
 	defer wordRelease()
