@@ -62,7 +62,7 @@ func run() error {
 	}
 	defer docReleaseFn()
 
-	err = doc.SaveAsWithFileFormat(abs(strings.ReplaceAll(args.file, "doc", "docx")), constants.WdFormatDocumentDefault)
+	err = doc.SaveAsWithFileFormat(abs(strings.ReplaceAll(args.file, "doc", "docx")), constants.WdSaveFormatDocumentDefault)
 	if err != nil {
 		return err
 	}
