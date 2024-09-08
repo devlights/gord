@@ -88,7 +88,7 @@ func toDocx(docs *gord.Documents, p string) error {
 	}
 	defer docReleaseFn()
 
-	err = doc.SaveAsWithFileFormat(abs(strings.ReplaceAll(p, "doc", "docx")), constants.WdFormatDocumentDefault)
+	err = doc.SaveAsWithFileFormat(abs(strings.ReplaceAll(p, "doc", "docx")), constants.WdSaveFormatDocumentDefault)
 	if err != nil {
 		return err
 	}
