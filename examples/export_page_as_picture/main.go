@@ -43,8 +43,6 @@ func main() {
 	if err := run(); err != nil {
 		log.Fatal(err)
 	}
-
-	appLog.Println("done")
 }
 
 func abs(p string) string {
